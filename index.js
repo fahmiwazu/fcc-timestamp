@@ -18,29 +18,33 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-
+// declare funtion to handle invalid date format
 const isInvalidDate = (date) => date.toUTCString() === "Invalid Date"
-
 
 // your first API endpoint... 
 app.get("/api/:date", function (req, res) {
+  // declare date format
   let date = new Date(req.params.date);
 
+  // verify date format
   if(isInvalidDate(date)){
     date = new Date(+req.params.date)
   }
 
+  // verify invalid date 
   if(isInvalidDate(date)){
     res.json({error: "Invalid Date"})
     return;
   }
-  
+
+  // date respond
   res.json({
     unix: date.getTime(),
     utc: date.toUTCString()
   });
 });
 
+// get current date when date format are empty
 app.get("/api", (req, res) =>{
     res.json({
       unix: new Date().getTime(),
